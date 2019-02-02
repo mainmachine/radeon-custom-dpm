@@ -1,0 +1,85 @@
+#!/bin/bash
+
+ACTION="$1"
+
+if [ "$ACTION" == "" ]; then
+  echo "No action specified!"
+  exit -99
+fi
+
+DEBUG=0
+SYSPATH=`find /sys/devices -name pp_od_clk_voltage 2>/dev/null | sed 's|/pp_od_clk_voltage||g' |head -n1`
+
+#POWERLIMIT="200000000"
+POWERCAPDEFAULT="175000000"
+POWERCAPMAX="$(cat /sys/class/drm/card0/device/hwmon/hwmon0/power1_cap_max)"
+
+#OD_RANGE:
+#SCLK:     300MHz       2000MHz
+#MCLK:     300MHz       2250MHz
+#VDDC:     750mV        1200mV
+
+#echo "manual" > "$SYSPATH/power_dpm_force_performance_level"
+
+case "$ACTION" in
+  "modify"*)
+    echo "s 0 300 750" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 1 600 750" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 2 900 887" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 3 1145 1000" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 4 1215 1010" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 5 1257 1020" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 6 1300 1030" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 7 1411 1050" > "$SYSPATH/pp_od_clk_voltage"
+
+    echo "m 0 300 750" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 1 1000 780" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 2 2000 900" > "$SYSPATH/pp_od_clk_voltage"
+
+    echo "$POWERCAPMAX" > /sys/class/drm/card0/device/hwmon/hwmon0/power1_cap
+
+    #force power level high
+
+    #set CPU governor for performance
+    ;;
+
+  "stock"*)
+     # stock settings
+    echo "s 0 300 750" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 1 600 769" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 2 900 900" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 3 1145 1112" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 4 1215 1193" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 5 1257 1150" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 6 1300 1150" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 7 1411 1150" > "$SYSPATH/pp_od_clk_voltage"
+
+    echo "m 0 300 750" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 1 1000 800" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 2 2000 950" > "$SYSPATH/pp_od_clk_voltage"
+
+    echo "$POWERCAPDEFAULT" > /sys/class/drm/card0/device/hwmon/hwmon0/power1_cap
+
+    #force power level low
+
+    #set CPU governor for ondemand
+    ;;
+
+  *)
+    echo "Error, bad request!"
+    exit -199
+    ;;
+esac
+
+# Commit changes:
+echo "c" > "$SYSPATH/pp_od_clk_voltage"
+
+#raise wattage limit
+#echo "$POWERLIMIT" | sudo tee  /sys/class/drm/card0/device/hwmon/hwmon0/power1_cap
+#echo "$POWERCAPMAX" > /sys/class/drm/card0/device/hwmon/hwmon0/power1_cap
+
+if [ "$(screen -list | grep amdgpu_stats)" == ""  ]; then
+  screen -dmS amdgpu_stats -L watch -n .5 cat "$SYSPATH"/pp_[a-d,o]*
+elif [ "$ACTION" == "stock" ]; then
+  screen -X -S "$(screen -list | grep amdgpu_stats | awk '{print $1}')" quit
+fi

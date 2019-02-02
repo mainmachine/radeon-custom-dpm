@@ -1,0 +1,10 @@
+[Unit]
+Description=AMD Power Control
+
+[Service]
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/rx580-power-control modify
+ExecStop=/usr/local/bin/rx580-power-control stock
+
+[Install]
+WantedBy=multi-user.target
