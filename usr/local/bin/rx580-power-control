@@ -23,18 +23,18 @@ POWERCAPMAX="$(cat /sys/class/drm/card0/device/hwmon/hwmon0/power1_cap_max)"
 
 case "$ACTION" in
   "modify"*)
-    echo "s 0 300 750" > "$SYSPATH/pp_od_clk_voltage"
-    echo "s 1 600 750" > "$SYSPATH/pp_od_clk_voltage"
-    echo "s 2 900 887" > "$SYSPATH/pp_od_clk_voltage"
-    echo "s 3 1145 1000" > "$SYSPATH/pp_od_clk_voltage"
-    echo "s 4 1215 1010" > "$SYSPATH/pp_od_clk_voltage"
-    echo "s 5 1257 1020" > "$SYSPATH/pp_od_clk_voltage"
-    echo "s 6 1300 1030" > "$SYSPATH/pp_od_clk_voltage"
-    echo "s 7 1411 1050" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 0 300 710" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 1 600 730" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 2 900 860" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 3 1145 930" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 4 1215 950" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 5 1257 1000" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 6 1300 1010" > "$SYSPATH/pp_od_clk_voltage"
+    echo "s 7 1411 1030" > "$SYSPATH/pp_od_clk_voltage"
 
-    echo "m 0 300 750" > "$SYSPATH/pp_od_clk_voltage"
-    echo "m 1 1000 780" > "$SYSPATH/pp_od_clk_voltage"
-    echo "m 2 2000 900" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 0 300 730" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 1 1000 760" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 2 2000 880" > "$SYSPATH/pp_od_clk_voltage"
 
     echo "$POWERCAPMAX" > /sys/class/drm/card0/device/hwmon/hwmon0/power1_cap
 
