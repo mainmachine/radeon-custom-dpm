@@ -44,7 +44,7 @@ case "$ACTION" in
     ;;
 
   "stock"*)
-     # stock settings
+    #stock settings for Sapphire RX 580 Nitro+
     echo "s 0 300 750" > "$SYSPATH/pp_od_clk_voltage"
     echo "s 1 600 769" > "$SYSPATH/pp_od_clk_voltage"
     echo "s 2 900 900" > "$SYSPATH/pp_od_clk_voltage"
