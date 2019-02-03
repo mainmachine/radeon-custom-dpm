@@ -32,9 +32,9 @@ case "$ACTION" in
     echo "s 6 1340 1010" > "$SYSPATH/pp_od_clk_voltage"
     echo "s 7 1450 1030" > "$SYSPATH/pp_od_clk_voltage"
 
-    echo "m 0 340 730" > "$SYSPATH/pp_od_clk_voltage"
-    echo "m 1 1040 760" > "$SYSPATH/pp_od_clk_voltage"
-    echo "m 2 2040 880" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 0 300 730" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 1 1000 760" > "$SYSPATH/pp_od_clk_voltage"
+    echo "m 2 2000 880" > "$SYSPATH/pp_od_clk_voltage"
 
     echo "$POWERCAPMAX" > /sys/class/drm/card0/device/hwmon/hwmon0/power1_cap
 
